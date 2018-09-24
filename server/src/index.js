@@ -1,10 +1,11 @@
-const path = require('path');
-const express = require('express');
+const io = require('socket.io')(3456);
 
-const app = express();
-
-app.use(express.static(path.join(__dirname, '../../client/dist')));
-
-app.listen(3456, () => {
-  console.log('server is running on 3456 port');
+io.on('connection', (socket) => {
+  console.log('client connected');
+  socket.on('data', (data) => {
+    console.log(data);
+    io.emit('message', data);
+  });
 });
+
+console.log('server started at port 3456');
